@@ -5,12 +5,16 @@ import handlebars from 'express-handlebars'
 
 const app = express();
 
+app.use(express.static('./static/public'))
+
 app.engine('hbs', handlebars.engine({
     extname: 'hbs',
 }))
 
 
-app.set('view endigne', 'hbs')
+app.set('view engine', 'hbs');
+
+app.set('views', './src/views');
 
 app.get('/', (req, res) => {
     res.render('home', {layout: false})
