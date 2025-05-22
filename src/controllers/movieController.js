@@ -22,7 +22,10 @@ movieController.post('/create', (req, res) => {
         res.render('details')
     })
     movieController.get('/search', (req, res) => {
-        res.render('search')
+
+        const movies = movieService.getAll()
+        
+        res.render('search', { movies })
     })
 })
 
