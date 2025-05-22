@@ -21,6 +21,9 @@ movieController.post('/create', (req, res) => {
 
         res.render('details')
     })
+    movieController.get('/search', (req, res) => {
+        res.render('search')
+    })
 })
 
 export default movieController;
