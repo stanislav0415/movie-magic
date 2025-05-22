@@ -5,7 +5,7 @@ import handlebars from 'express-handlebars'
 
 const app = express();
 
-app.use(express.static('./static/public'))
+app.use(express.static('./src/public'))
 
 app.engine('hbs', handlebars.engine({
     extname: 'hbs',
