@@ -21,6 +21,10 @@ app.engine('hbs', handlebars.engine({
             return '★'.repeat(Math.floor(rating));
             // return '&#x2605;'.repeat(Math.floor(rating));
         }
+    },
+    runtimeOptions: {
+        allowProtoMethodsByDefault: true,
+        allowProtoPropertiesByDefault: true,
     }
 }));
 try {
