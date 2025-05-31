@@ -1,10 +1,9 @@
-import { Schema,model } from "mongoose";
+import { Schema, model } from 'mongoose'
 
 const castSchema = new Schema({
     name: {
         type: String,
         required: true,
-
     },
     age: {
         type: Number,
@@ -12,19 +11,17 @@ const castSchema = new Schema({
         min: 12,
         max: 120,
     },
-    born: {
+    born: { 
         type: String,
         required: true,
-
     },
     imageUrl: {
         type: String,
-         validate:[ /^https?:\/\//, 'invalid image url'],
-         required: true,
+        validate: [/^https?:\/\//, 'Invalid Image URL!'],
+        required: true,
     }
+});
 
-})
-
-const Cast = model('Cast', 'castSchema');
+const Cast = model('Cast', castSchema);
 
 export default Cast;
