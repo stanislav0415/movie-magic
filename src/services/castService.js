@@ -1,13 +1,17 @@
-import Cast from '../models/Cast.js';
+import Cast from "../models/Cast.js";
 
 export default {
-    getAll() {
-        let query = Cast.find()
+    getAll(filter) {
+        let query = Cast.find();
 
+        if (filter.exclude) {
+         
+            query = query.nin('_id', filter.exclude);
+        }
 
-        return Cast.find();
+        return query;
     },
     create(castData) {
         return Cast.create(castData);
     }
-}
+};

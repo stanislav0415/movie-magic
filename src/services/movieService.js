@@ -14,7 +14,7 @@ export default {
         }
 
         if (filter.year) {
-            // query = query.find({ year: filter.year });
+            
             query = query.where('year').equals(filter.year);
         }
 
