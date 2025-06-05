@@ -20,8 +20,10 @@ export default {
 
         return query;
     },
-    create(movieData) {
+    create(movieData, userId) {
         const movie = new Movie(movieData);
+
+        movie.owner = userId;
 
         return movie.save();
     },
@@ -38,5 +40,9 @@ export default {
 
         return movie.save();
     },
+
+    async delete(movieId) {
+        return Movie.findByIdAndDelete(movieId)
+    }
    
 }

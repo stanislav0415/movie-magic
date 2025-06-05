@@ -13,6 +13,7 @@ export const auth = (req, res, next) => {
 
         req.user = { id, email };
         res.locals.user = { id, email };
+        res.locals.user = { id, email };
 
         next();
     } catch (err) {
