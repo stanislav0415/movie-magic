@@ -9,6 +9,10 @@ movieController.get('/create', (req, res) => {
 });
 
 movieController.post('/create', async (req, res) => {
+
+
+    const userId = req.user.id;
+
     const newMovie = req.body;
 
    
@@ -22,8 +26,12 @@ movieController.get('/:movieId/details', async (req, res) => {
    
     const movieId = req.params.movieId;
 
+    const userId = req.user?.id;
+
    
     const movie = await movieService.getOne(movieId);
+
+    const isOwner = movie.owner?.equals(userId);
 
 
     res.render('movie/details', { movie });

@@ -1,11 +1,11 @@
 import bcrypt from 'bcrypt'
 
 import User from "../models/User.js"
-//import { generateAuthToken } from '../utils/authUtils.js';
+import { generateAuthToken } from '../utils/authUtils.js';
 
 export default {
     async register(userData) {
-        // TODO: Check if user exists
+       
 
         const user = await User.create(userData);
         
@@ -31,7 +31,7 @@ export default {
         }
 
         // If valid generate token
-        //const token = generateAuthToken(user);
+        const token = generateAuthToken(user);
 
         // Return token
         return token;
