@@ -41,8 +41,12 @@ export default {
         return movie.save();
     },
 
-    async delete(movieId) {
+    delete(movieId) {
         return Movie.findByIdAndDelete(movieId)
+    },
+
+    update(movieId, movieData) {
+        return Movie.findByIdandUpdate(movieId, movieData);
     }
    
 }
