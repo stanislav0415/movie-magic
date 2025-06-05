@@ -1,6 +1,8 @@
 import express from 'express'
 import movieService from '../services/movieService.js';
 import castService from '../services/castService.js';
+import { Types } from 'mongoose';
+import { getCategoryOptionsViewData } from '../utils/movieUtils.js';
 
 const movieController = express.Router();
 
@@ -80,7 +82,7 @@ movieController.get('/:movieId/delete', async (req, res) => {
     await movieService.delete(movieId)
 
     res.redirect('/')
-})
+});
 
 movieController.get('/:movieId/edit', async (req, res) => {
 
@@ -100,7 +102,13 @@ movieController.get('/:movieId/edit', async (req, res) => {
     }
 
 
-    res.render('movie/edit', { movie });
+    const getCategoryOptionsViewData = getCategoryOptionsViewData(movie.category)
+
+    res.render('movie/edit', { 
+        movie, 
+        categoryOptions: getCategoryOptionsViewData,
+        pageTitle: 'Edit'
+    });
 })
 
 movieController.post('/:movieId/edit', async (req, res) => {
