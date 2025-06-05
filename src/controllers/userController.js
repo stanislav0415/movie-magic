@@ -1,10 +1,20 @@
 import { Router } from "express";
+import userService from "../services/userService";
 
 const userController = Router();
 
 
 userController.get('/register', (req, res) => {
     res.render('user/register')
+})
+
+userController.post('/register',async (req, res) => {
+    
+    const userData = req.body;
+
+    await userService.register(userData);
+
+    res.redirect('/users/login');
 })
 
 export default userController;
