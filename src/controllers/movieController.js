@@ -88,7 +88,13 @@ movieController.get('/:movieId/edit', async (req, res) => {
 
 
     const movie = await movieService.getOne(movieId);
+       //TODO: CHECK IF OWNER
+    const isOwner = movie.owner?.equals(movieId);
 
+    if (!isOwner) {
+        //TODO: ADD ERROR HANDLING
+       return res.status(403).end()
+    }
 
 
     res.render('movie/edit', { movie });
