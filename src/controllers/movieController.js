@@ -1,13 +1,12 @@
 import express from 'express'
 import movieService from '../services/movieService.js';
 import castService from '../services/castService.js';
-import { Types } from 'mongoose';
 import { getCategoryOptionsViewData } from '../utils/movieUtils.js';
-import { isAuth } from '../middlewares/authMiddleware.js';
+import { auth } from '../middleware/authMiddleware.js';
 
 const movieController = express.Router();
 
-movieController.get('/create', isAuth,(req, res) => {
+movieController.get('/create', auth,(req, res) => {
     res.render('create');
 });
 
@@ -19,7 +18,7 @@ movieController.post('/create', async (req, res) => {
     const newMovie = req.body;
 
    
-    await movieService.create(newMovie);
+    await movieService.create(newMovie,userId);
 
   
     res.redirect('/');
@@ -34,10 +33,10 @@ movieController.get('/:movieId/details', async (req, res) => {
    
     const movie = await movieService.getOne(movieId);
 
+
     const isOwner = movie.owner?.equals(userId);
 
-
-    res.render('movie/details', { movie });
+    res.render('movie/details', { movie, isOwner, pageTitle: 'Details' });
 });
 
 movieController.get('/search', async (req, res) => {
@@ -53,7 +52,7 @@ movieController.get('/search', async (req, res) => {
 
 
 
-movieController.get('/:movieId/attach',isAuth, async (req, res) => {
+movieController.get('/:movieId/attach',auth, async (req, res) => {
     const movieId = req.params.movieId;
 
  
@@ -63,7 +62,7 @@ movieController.get('/:movieId/attach',isAuth, async (req, res) => {
     const casts = await castService.getAll({ exclude: movie.casts });
 
   
-    res.render('movie/attach',isAuth, { movie, casts });
+     res.render('movie/attach', { movie, casts, pageTitle: 'Attach' });
 });
 
 movieController.post('/:movieId/attach', async (req, res) => {
@@ -80,7 +79,7 @@ movieController.post('/:movieId/attach', async (req, res) => {
     res.redirect(`/movies/${movieId}/details`);
 });
 
-movieController.get('/:movieId/delete',isAuth, async (req, res) => {
+movieController.get('/:movieId/delete',auth, async (req, res) => {
     const movieId = req.params.movieId;
 
     await movieService.delete(movieId)
@@ -88,7 +87,7 @@ movieController.get('/:movieId/delete',isAuth, async (req, res) => {
     res.redirect('/')
 });
 
-movieController.get('/:movieId/edit',isAuth, async (req, res) => {
+movieController.get('/:movieId/edit',auth, async (req, res) => {
 
     const movieId = req.params.movieId;
 
@@ -96,7 +95,7 @@ movieController.get('/:movieId/edit',isAuth, async (req, res) => {
     const movie = await movieService.getOne(movieId);
        //TODO: CHECK IF OWNER
 
-    const userId = req.userId?.id;
+    const userId = req.user?.id;
 
     const isOwner = movie.owner?.equals(userId);
 
@@ -106,16 +105,16 @@ movieController.get('/:movieId/edit',isAuth, async (req, res) => {
     }
 
 
-    const getCategoryOptionsViewData = getCategoryOptionsViewData(movie.category)
+    const categoryOptionsViewData = getCategoryOptionsViewData(movie.category);
 
     res.render('movie/edit', { 
         movie, 
-        categoryOptions: getCategoryOptionsViewData,
+        categoryOptions: categoryOptionsViewData,
         pageTitle: 'Edit'
     });
 })
 
-movieController.post('/:movieId/edit',isAuth, async (req, res) => {
+movieController.post('/:movieId/edit',auth, async (req, res) => {
    const movieId = req.params.movieId;
 
    const movieData = req.body;
