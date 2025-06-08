@@ -3,7 +3,7 @@ import handlebars from 'express-handlebars'
 import mongoose from 'mongoose';
 import cookieParser from 'cookie-parser';
 
-import { auth } from './Middlewares/authMiddleware.js';
+import { auth } from './middleware/authMiddleware.js';
 import routes from './routes.js';
 
 const app = express();
