@@ -2,9 +2,10 @@ import express from 'express'
 import handlebars from 'express-handlebars'
 import mongoose from 'mongoose';
 import cookieParser from 'cookie-parser';
-
+import session from 'express-session';
 import { auth } from './middleware/authMiddleware.js';
 import routes from './routes.js';
+import { tempData } from './middleware/tempDataMiddleware.js';
 
 const app = express();
 
@@ -14,7 +15,18 @@ app.use(cookieParser());
 
 app.use(express.urlencoded());
 
+app.use(session({
+  secret: 'seeeeeeecreeeeeeeeeeettttttttt',
+  resave: false,
+  saveUninitialized: true,
+  cookie: { secure: true, httpOnly: true }
+}))
+
 app.use(auth);
+
+
+app.use(tempData)
+
 
 app.engine('hbs', handlebars.engine({
     extname: 'hbs',
@@ -22,7 +34,12 @@ app.engine('hbs', handlebars.engine({
         showRating(rating) {
             return '★'.repeat(Math.floor(rating));
         
+        },
+
+        setTitle(title) {
+            this.pageTitle = title;
         }
+
     },
    
     runtimeOptions: {

@@ -3,11 +3,12 @@ import movieService from '../services/movieService.js';
 import castService from '../services/castService.js';
 import { getCategoryOptionsViewData } from '../utils/movieUtils.js';
 import { auth } from '../middleware/authMiddleware.js';
+import { getErrorMessage } from '../utils/errorUtils.js';
 
 const movieController = express.Router();
 
 movieController.get('/create', auth,(req, res) => {
-    res.render('create');
+    res.render('movie/create');
 });
 
 movieController.post('/create', async (req, res) => {
@@ -18,10 +19,21 @@ movieController.post('/create', async (req, res) => {
     const newMovie = req.body;
 
    
+   try {
     await movieService.create(newMovie,userId);
 
-  
-    res.redirect('/');
+    
+
+       res.redirect('/');
+   } catch (err) {
+
+    const categoryOptionsViewData = getCategoryOptionsViewData(newMovie.category)
+
+    res.render('movie/create', {
+        error: getErrorMessage(err),
+        movie: newMovie, 
+        categoryOptions})
+   }
 });
 
 movieController.get('/:movieId/details', async (req, res) => {
@@ -100,8 +112,8 @@ movieController.get('/:movieId/edit',auth, async (req, res) => {
     const isOwner = movie.owner?.equals(userId);
 
     if (!isOwner) {
-        //TODO: ADD ERROR HANDLING
-       return res.status(403).end()
+        
+       return res.dataRedirect('/404', {error: 'You do not have access edit this movie'})
     }
 
 
