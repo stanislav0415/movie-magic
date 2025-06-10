@@ -25,7 +25,7 @@ export default {
 
        
         if (!user) {
-            return new Error('No such user!');
+            throw new Error('No such user!');
         }
 
        
@@ -33,7 +33,7 @@ export default {
 
         
         if (!isValid) {
-            return new Error('Invalid password');
+            throw new Error('Invalid password');
         }
 
        
