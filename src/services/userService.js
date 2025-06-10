@@ -9,7 +9,7 @@ export default {
         const existingUser = await user.find({ email: userData.email });
 
         if (existingUser) {
-            throw new Error('User already exists');
+            throw new Error('User already exists!');
             
         }
 
