@@ -13,6 +13,8 @@ const userSchema = new Schema({
     password: {
         type: String,
         required: [true, 'Please provide password!'],
+        validate: [/^[a-zA-Z0-9]+$/, 'Password should be at alphanumeric'],
+        minLength:[6, 'Password should be at least 6 characters long!']
     },
 });
 
@@ -22,6 +24,15 @@ userSchema.pre('save', async function () {
   
     this.password = await bcrypt.hash(this.password, 10);
 });
+
+userSchema.virtual('rePassword')
+.set(function(value){
+     if (this.password !== value ) {
+        throw new Error('Password Missedmatch!');
+        
+     }});
+
+    
 
 const User = model('User', userSchema);
 
